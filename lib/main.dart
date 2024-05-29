@@ -12,7 +12,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     final themeController = Get.put(ThemeController());
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
     return Obx(
       () => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Template',
+        title: 'app_name'.tr,
         darkTheme: AppThemeData.dark,
         theme: AppThemeData.light,
         themeMode: themeController.themeMode.value,

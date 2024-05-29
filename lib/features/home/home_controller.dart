@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../../common_imports.dart';
 import 'home_services.dart';
 
@@ -48,6 +50,7 @@ class HomeController extends GetxController {
     } else {
       prediction.value = "Something went wrong";
     }
+    log("$features -> ${prediction.value}", name: "Features -> Prediction");
   }
 
   @override

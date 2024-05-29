@@ -1,14 +1,8 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
-import 'package:salary_prediction/features/home/home_controller.dart';
-
 import '../../common/controllers/language_controller.dart';
 import '/common/controllers/theme_controller.dart';
 
 import '../../common_imports.dart';
-import 'home_services.dart';
+import 'home_controller.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -16,7 +10,6 @@ class HomePage extends StatelessWidget {
   final languageController = Get.put(LanguageController());
   final homeController = Get.put(HomeController());
   final _formKey = GlobalKey<FormState>();
-  List<String> list = <String>['One', 'Two', 'Three', 'Four'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,49 +200,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
             FilledButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  homeController.predict();
-                  Get.dialog(Dialog(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            CloseButton(),
-                          ],
-                        ).paddingOnly(left: 10, right: 10),
-                        SizedBox(
-                          height: 150,
-                          child: FittedBox(
-                              child: Image.asset("assets/congratulations.gif")),
-                        ),
-                        const Text(
-                          "Predicted Salary",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                            color: Colors.blue,
-                          ),
-                        ).paddingAll(10),
-                        Text(
-                          homeController.prediction.value,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 24,
-                            color: Colors.blue,
-                          ),
-                        ).paddingAll(10),
-                        const SizedBox(height: 10)
-                      ],
-                    ),
-                  ));
-                }
-              },
+              onPressed: onPredict,
               child: const Text("Predict"),
             ).paddingSymmetric(vertical: 14, horizontal: 10),
             const SizedBox(height: 100),
@@ -257,5 +208,51 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  onPredict() async {
+    if (_formKey.currentState!.validate()) {
+      homeController.predict();
+      await Get.dialog(Dialog(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            const Positioned(top: 1, left: 1, child: CloseButton()),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 160,
+                  child: Image.asset("assets/congratulations.gif"),
+                ),
+                const Text(
+                  "Predicted Salary",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: Colors.blue,
+                  ),
+                ).paddingOnly(top: 10),
+                Obx(
+                  () => Text(
+                    homeController.prediction.value,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 24,
+                      color: Colors.blue,
+                    ),
+                  ).paddingOnly(top: 5, bottom: 10, left: 10, right: 10),
+                ),
+                const SizedBox(height: 10)
+              ],
+            ),
+          ],
+        ),
+      ));
+    }
   }
 }
